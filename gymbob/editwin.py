@@ -44,7 +44,7 @@ class ProgEditWin(Gtk.Window):
 
     Args:
 
-        app_obj (mainapp.TartubeApp): The main application object
+        app_obj (mainapp.GymBobApp): The main application object
 
         edit_obj (gymprog.GymProg): The object whose attributes will be edited
             in this window

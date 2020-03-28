@@ -48,7 +48,7 @@ class MainWin(Gtk.ApplicationWindow):
 
     Args:
 
-        app_obj (mainapp.TartubeApp): The main application object
+        app_obj (mainapp.GymBobApp): The main application object
 
     """
 

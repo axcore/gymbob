@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2019-z2020 A S Lewis
+# Copyright (C) 2020 A S Lewis
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -40,10 +40,10 @@ param_list = []
 # For Debian/RPM packaging, use environment variables:
 #   GYMBOB_PKG=1 python3 setup.py build
 script_exec = os.path.join('gymbob', 'gymbob')
-icon_path = '/tartube/icons/'
+icon_path = '/gymbob/icons/'
 
 pkg_flag = False
-pkg_var = 'TARTUBE_PKG'
+pkg_var = 'GYMBOB_PKG'
 pkg_value = os.environ.get( pkg_var, None )
 
 if pkg_value is not None:
@@ -51,7 +51,7 @@ if pkg_value is not None:
     if pkg_value == '1':
 
         # Icons must be copied into the right place
-        icon_path = '/usr/share/tartube/icons/'
+        icon_path = '/usr/share/gymbob/icons/'
         # Add a desktop file
         param_list.append(('share/applications', ['pack/gymbob.desktop']))
         param_list.append(('share/pixmaps', ['pack/gymbob.png']))
@@ -77,7 +77,7 @@ for subdir in subdir_list:
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='1.002',
+    version='1.005',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',

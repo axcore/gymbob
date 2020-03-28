@@ -34,7 +34,7 @@ import importlib.util
 spec = importlib.util.find_spec('gymbob')
 if spec is not None:
     sys.path.append(os.path.abspath(os.path.dirname(spec.origin)))
-    
+
 
 # Import our modules
 import mainapp
@@ -43,7 +43,7 @@ import mainapp
 # 'Global' variables
 __packagename__ = 'gymbob'
 __prettyname__ = 'GymBob'
-__version__ = '1.002'
+__version__ = '1.005'
 __date__ = '28 Mar 2020'
 __copyright__ = 'Copyright \xa9 2020 A S Lewis'
 __license__ = """
