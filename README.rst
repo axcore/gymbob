@@ -33,11 +33,11 @@ Problems can be reported at `our GitHub page <https://github.com/axcore/gymbob/i
 2 Downloads
 ===========
 
-Latest version: **v1.012 (28 Mar 2020)**
+Latest version: **v1.014 (28 Mar 2020)**
 
-- `DEB package (for Debian-based distros, e.g. Ubuntu, Linux Mint) <https://sourceforge.net/projects/gymbob/files/v1.012/python3-gymbob_1.012.deb/download>`__ from Sourceforge
-- `RPM package (for RHEL-based distros, e.g. Fedora) <https://sourceforge.net/projects/gymbob/files/v1.012/gymbob-1.012.rpm/download>`__ from Sourceforge
-- `Source code <https://sourceforge.net/projects/gymbob/files/v1.012/gymbob_v1.012.tar.gz/download>`__ from Sourceforge
+- `DEB package (for Debian-based distros, e.g. Ubuntu, Linux Mint) <https://sourceforge.net/projects/gymbob/files/v1.014/python3-gymbob_1.014.deb/download>`__ from Sourceforge
+- `RPM package (for RHEL-based distros, e.g. Fedora) <https://sourceforge.net/projects/gymbob/files/v1.014/gymbob-1.014.rpm/download>`__ from Sourceforge
+- `Source code <https://sourceforge.net/projects/gymbob/files/v1.014/gymbob_v1.014.tar.gz/download>`__ from Sourceforge
 - `Source code <https://github.com/axcore/gymbob>`__ and `support <https://github.com/axcore/gymbob/issues>`__ from GitHub
 
 3 Quick start guide 

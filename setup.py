@@ -74,13 +74,13 @@ if pkg_value is not None:
 for path in glob.glob('icons/*'):
     param_list.append((icon_path, [path]))
 for path in glob.glob('sounds/*'):
-    param_list.append((icon_path, [path]))
+    param_list.append((sound_path, [path]))
 
 
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='1.012',
+    version='1.014',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',
@@ -103,7 +103,7 @@ setuptools.setup(
     ],
     keywords='gymbob gym workout',
     packages=setuptools.find_packages(
-        exclude=('docs', 'icons', 'tests'),
+        exclude=('docs', 'icons', 'sounds', 'tests'),
     ),
     include_package_data=True,
     python_requires='>=3.0, <4',

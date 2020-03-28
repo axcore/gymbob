@@ -86,7 +86,7 @@ class GymBobApp(Gtk.Application):
             os.path.join(self.script_dir, os.pardir),
         )
         # The directory in which sound files are found (set in self.start())
-        self.sound_dir = None
+        self.sound_dir = None 
         # The directory in which workout programmes can be stored (as .json
         #   files)
         self.data_dir = os.path.abspath(
@@ -95,7 +95,7 @@ class GymBobApp(Gtk.Application):
                 __main__.__packagename__ + '-data',
             ),
         )
-
+        
         # List of sound files found in the ../sounds directory
         self.sound_list = []
         # So that a sound can be played from within its own thread, the name of
@@ -268,7 +268,7 @@ class GymBobApp(Gtk.Application):
         for sound_dir_path in sound_dir_list:
             if os.path.isdir(sound_dir_path):
                 self.sound_dir = sound_dir_path
-
+                    
                 # Get a list of available sound files, and sort alphabetically
                 for (dirpath, dir_list, file_list) in os.walk(self.sound_dir):
                     for filename in file_list:
