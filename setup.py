@@ -77,7 +77,7 @@ for subdir in subdir_list:
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='1.0',
+    version='1.002',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',
