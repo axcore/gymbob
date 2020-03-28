@@ -41,6 +41,7 @@ param_list = []
 #   GYMBOB_PKG=1 python3 setup.py build
 script_exec = os.path.join('gymbob', 'gymbob')
 icon_path = '/gymbob/icons/'
+sound_path = '/gymbob/sounds/'
 
 pkg_flag = False
 pkg_var = 'GYMBOB_PKG'
@@ -50,8 +51,9 @@ if pkg_value is not None:
 
     if pkg_value == '1':
 
-        # Icons must be copied into the right place
+        # Icons/sounds must be copied into the right place
         icon_path = '/usr/share/gymbob/icons/'
+        sound_path = '/usr/share/gymbob/sounds/'
         # Add a desktop file
         param_list.append(('share/applications', ['pack/gymbob.desktop']))
         param_list.append(('share/pixmaps', ['pack/gymbob.png']))
@@ -68,16 +70,17 @@ if pkg_value is not None:
         )
 
 # For PyPI installations and Debian/RPM packaging, copy everything in ../icons
-#   into a suitable location
-subdir_list = ['win']
-for subdir in subdir_list:
-    for path in glob.glob('icons/' + subdir + '/*'):
-        param_list.append((icon_path + subdir + '/', [path]))
+#   and ../sounds into a suitable location
+for path in glob.glob('icons/*'):
+    param_list.append((icon_path, [path]))
+for path in glob.glob('sounds/*'):
+    param_list.append((icon_path, [path]))
+
 
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='1.010',
+    version='1.012',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',

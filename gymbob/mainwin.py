@@ -173,7 +173,6 @@ class MainWin(Gtk.ApplicationWindow):
                     path = os.path.abspath(
                         os.path.join(
                             icon_dir_path,
-                            'win',
                             __main__.__packagename__ + '_icon_' + str(size) \
                             + '.png',
                         ),

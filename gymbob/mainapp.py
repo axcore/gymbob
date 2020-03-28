@@ -85,6 +85,8 @@ class GymBobApp(Gtk.Application):
         self.script_parent_dir = os.path.abspath(
             os.path.join(self.script_dir, os.pardir),
         )
+        # The directory in which sound files are found (set in self.start())
+        self.sound_dir = None
         # The directory in which workout programmes can be stored (as .json
         #   files)
         self.data_dir = os.path.abspath(
@@ -237,17 +239,45 @@ class GymBobApp(Gtk.Application):
             self.script_timer_callback,
         )
 
-        # Get a list of available sound files, and sort alphabetically
-        sound_dir = os.path.abspath(
-            os.path.join(self.script_parent_dir, 'sounds'),
+        # Set the directory in which sound files are stored
+        # When installed via PyPI, the files are moved to ../gymbob/sounds
+        # When installed via a Debian/RPM package, the files are moved to
+        #   /usr/share/gymbob/sounds
+        sound_dir_list = []
+        sound_dir_list.append(
+            os.path.abspath(
+                os.path.join(self.script_parent_dir, 'sounds'),
+            ),
         )
 
-        for (dirpath, dir_list, file_list) in os.walk(sound_dir):
-            for filename in file_list:
-                if filename != 'COPYING':
-                    self.sound_list.append(filename)
+        sound_dir_list.append(
+            os.path.abspath(
+                os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    'sounds',
+                ),
+            ),
+        )
 
-        self.sound_list.sort()
+        sound_dir_list.append(
+            os.path.join(
+                '/', 'usr', 'share', __main__.__packagename__, 'sounds',
+            )
+        )
+
+        for sound_dir_path in sound_dir_list:
+            if os.path.isdir(sound_dir_path):
+                self.sound_dir = sound_dir_path
+
+                # Get a list of available sound files, and sort alphabetically
+                for (dirpath, dir_list, file_list) in os.walk(self.sound_dir):
+                    for filename in file_list:
+                        if filename != 'COPYING':
+                            self.sound_list.append(filename)
+
+                self.sound_list.sort()
+
+                break
 
         # Create the data directory (in which workout programmes are stored as
         #   .json files), if it doesn't already exist
@@ -431,10 +461,10 @@ class GymBobApp(Gtk.Application):
         self.sound_file = None
 
         # (The value might be None or an empty string)
-        if not self.mute_sound_flag and sound_file:
+        if not self.mute_sound_flag and self.sound_dir and sound_file:
 
             path = os.path.abspath(
-                os.path.join(self.script_parent_dir, 'sounds', sound_file),
+                os.path.join(self.sound_dir, sound_file),
             )
 
             if os.path.isfile(path):
