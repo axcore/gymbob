@@ -33,11 +33,11 @@ Problems can be reported at `our GitHub page <https://github.com/axcore/gymbob/i
 2 Downloads
 ===========
 
-Latest version: **v1.014 (28 Mar 2020)**
+Latest version: **v1.017 (29 Mar 2020)**
 
-- `DEB package (for Debian-based distros, e.g. Ubuntu, Linux Mint) <https://sourceforge.net/projects/gymbob/files/v1.014/python3-gymbob_1.014.deb/download>`__ from Sourceforge
-- `RPM package (for RHEL-based distros, e.g. Fedora) <https://sourceforge.net/projects/gymbob/files/v1.014/gymbob-1.014.rpm/download>`__ from Sourceforge
-- `Source code <https://sourceforge.net/projects/gymbob/files/v1.014/gymbob_v1.014.tar.gz/download>`__ from Sourceforge
+- `DEB package (for Debian-based distros, e.g. Ubuntu, Linux Mint) <https://sourceforge.net/projects/gymbob/files/v1.017/python3-gymbob_1.017.deb/download>`__ from Sourceforge
+- `RPM package (for RHEL-based distros, e.g. Fedora) <https://sourceforge.net/projects/gymbob/files/v1.017/gymbob-1.017.rpm/download>`__ from Sourceforge
+- `Source code <https://sourceforge.net/projects/gymbob/files/v1.017/gymbob_v1.017.tar.gz/download>`__ from Sourceforge
 - `Source code <https://github.com/axcore/gymbob>`__ and `support <https://github.com/axcore/gymbob/issues>`__ from GitHub
 
 3 Quick start guide 
@@ -59,7 +59,14 @@ Linux/BSD users can use any of the following installation methods.
 4.1 Install using the DEB/RPM packages
 --------------------------------------
 
-Linux distributions based on Debian, such as Ubuntu and Linux Mint, can install **GymBob** using the DEB package (see the links above). Linux distributions based on RHEL, such as Fedora, can install **GymBob** using the RPM package (see the links above). 
+Linux distributions based on RHEL, such as Fedora, can install **GymBob** using the RPM package (see the links above). 
+
+Linux distributions based on Debian, such as Ubuntu and Linux Mint, can install **GymBob** using the DEB package (see the links above). 
+
+Note that, for reasons I don't understand, the Debian packager doesn't pick up the Python playsound module. If you want to hear sound effects, open a terminal window and install it yourself:
+
+1. Type: ``sudo apt install python3-pip``
+2. Type: ``sudo pip3 install playsound``
 
 4.2 Install using PyPI
 ----------------------

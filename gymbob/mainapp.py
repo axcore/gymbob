@@ -26,17 +26,24 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 
 
-# Import other modules
+# Import Python standard modules
 from gi.repository import Gio
 import datetime
 import json
 import os
-import playsound
 import re
 import subprocess
 import sys
 import threading
 import time
+
+
+# Import other Python modules
+try:
+    import playsound
+    HAVE_PLAYSOUND_FLAG = True
+except:
+    HAVE_PLAYSOUND_FLAG = False
 
 
 # Import our modules
@@ -86,7 +93,7 @@ class GymBobApp(Gtk.Application):
             os.path.join(self.script_dir, os.pardir),
         )
         # The directory in which sound files are found (set in self.start())
-        self.sound_dir = None 
+        self.sound_dir = None
         # The directory in which workout programmes can be stored (as .json
         #   files)
         self.data_dir = os.path.abspath(
@@ -95,7 +102,7 @@ class GymBobApp(Gtk.Application):
                 __main__.__packagename__ + '-data',
             ),
         )
-        
+
         # List of sound files found in the ../sounds directory
         self.sound_list = []
         # So that a sound can be played from within its own thread, the name of
@@ -268,7 +275,7 @@ class GymBobApp(Gtk.Application):
         for sound_dir_path in sound_dir_list:
             if os.path.isdir(sound_dir_path):
                 self.sound_dir = sound_dir_path
-                    
+
                 # Get a list of available sound files, and sort alphabetically
                 for (dirpath, dir_list, file_list) in os.walk(self.sound_dir):
                     for filename in file_list:
@@ -461,7 +468,8 @@ class GymBobApp(Gtk.Application):
         self.sound_file = None
 
         # (The value might be None or an empty string)
-        if not self.mute_sound_flag and self.sound_dir and sound_file:
+        if HAVE_PLAYSOUND_FLAG and not self.mute_sound_flag \
+        and self.sound_dir and sound_file:
 
             path = os.path.abspath(
                 os.path.join(self.sound_dir, sound_file),
