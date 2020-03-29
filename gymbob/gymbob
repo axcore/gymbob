@@ -43,7 +43,7 @@ import mainapp
 # 'Global' variables
 __packagename__ = 'gymbob'
 __prettyname__ = 'GymBob'
-__version__ = '1.017'
+__version__ = '1.019'
 __date__ = '29 Mar 2020'
 __copyright__ = 'Copyright \xa9 2020 A S Lewis'
 __license__ = """

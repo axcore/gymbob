@@ -26,24 +26,17 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject, GdkPixbuf
 
 
-# Import Python standard modules
+# Import other modules
 from gi.repository import Gio
 import datetime
 import json
 import os
+import playsound
 import re
 import subprocess
 import sys
 import threading
 import time
-
-
-# Import other Python modules
-try:
-    import playsound
-    HAVE_PLAYSOUND_FLAG = True
-except:
-    HAVE_PLAYSOUND_FLAG = False
 
 
 # Import our modules
@@ -468,8 +461,7 @@ class GymBobApp(Gtk.Application):
         self.sound_file = None
 
         # (The value might be None or an empty string)
-        if HAVE_PLAYSOUND_FLAG and not self.mute_sound_flag \
-        and self.sound_dir and sound_file:
+        if not self.mute_sound_flag and self.sound_dir and sound_file:
 
             path = os.path.abspath(
                 os.path.join(self.sound_dir, sound_file),
