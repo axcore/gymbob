@@ -72,6 +72,7 @@ class ProgEditWin(Gtk.Window):
         self.ok_button = None                   # Gtk.Button
         self.cancel_button = None               # Gtk.Button
 
+        self.scrolled = None                    # Gtk.ScrolledWindow
         self.treeview = None                    # Gtk.TreeView
         self.liststore = None                   # Gtk.ListStore
 
@@ -161,12 +162,15 @@ class ProgEditWin(Gtk.Window):
         frame.set_hexpand(True)
         frame.set_vexpand(True)
 
-        scrolled = Gtk.ScrolledWindow()
-        frame.add(scrolled)
-        scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.scrolled = Gtk.ScrolledWindow()
+        frame.add(self.scrolled)
+        self.scrolled.set_policy(
+            Gtk.PolicyType.AUTOMATIC,
+            Gtk.PolicyType.AUTOMATIC,
+        )
 
         self.treeview = Gtk.TreeView()
-        scrolled.add(self.treeview)
+        self.scrolled.add(self.treeview)
         self.treeview.set_headers_visible(True)
 
         for i, column_title in enumerate( ['#', 'Time', 'Message', 'Sound'] ):
@@ -214,9 +218,17 @@ class ProgEditWin(Gtk.Window):
         combo.set_entry_text_column(0)
         combo.set_active(0)
 
-        button = Gtk.Button('Add message')
-        mini_grid.attach(button, 0, 4, 1, 1)
+        button = Gtk.Button('Test')
+        mini_grid.attach(button, 3, 3, 1, 1)
         button.connect(
+            'clicked',
+            self.on_button_test_clicked,
+            combo,
+        )
+
+        button2 = Gtk.Button('Add message')
+        mini_grid.attach(button2, 0, 4, 1, 1)
+        button2.connect(
             'clicked',
             self.on_button_add_clicked,
             entry,
@@ -224,9 +236,9 @@ class ProgEditWin(Gtk.Window):
             combo,
         )
 
-        button2 = Gtk.Button('Update message')
-        mini_grid.attach(button2, 1, 4, 1, 1)
-        button2.connect(
+        button3 = Gtk.Button('Update message')
+        mini_grid.attach(button3, 1, 4, 1, 1)
+        button3.connect(
             'clicked',
             self.on_button_update_clicked,
             entry,
@@ -234,17 +246,31 @@ class ProgEditWin(Gtk.Window):
             combo,
         )
 
-        button3 = Gtk.Button('Delete message')
-        mini_grid.attach(button3, 2, 4, 1, 1)
-        button3.connect('clicked', self.on_button_delete_clicked)
+        button4 = Gtk.Button('Delete message')
+        mini_grid.attach(button4, 2, 4, 1, 1)
+        button4.connect('clicked', self.on_button_delete_clicked)
 
-        button4 = Gtk.Button('Move up')
-        mini_grid.attach(button4, 3, 4, 1, 1)
-        button4.connect('clicked', self.on_button_move_up_clicked)
+        button5 = Gtk.Button('Move up')
+        mini_grid.attach(button5, 3, 4, 1, 1)
+        button5.connect('clicked', self.on_button_move_up_clicked)
 
-        button5 = Gtk.Button('Move down')
-        mini_grid.attach(button5, 4, 4, 1, 1)
-        button5.connect('clicked', self.on_button_move_down_clicked)
+        button6 = Gtk.Button('Move down')
+        mini_grid.attach(button6, 4, 4, 1, 1)
+        button6.connect('clicked', self.on_button_move_down_clicked)
+
+        # If sound is muted, then there's no point in testing sound effects
+        if self.app_obj.mute_sound_flag:
+            button.set_sensitive(False)
+
+        # Programmes can't be edited while any programme is running
+        if self.app_obj.current_prog_started_flag:
+            entry.set_sensitive(False)
+            entry2.set_sensitive(False)
+            button2.set_sensitive(False)
+            button3.set_sensitive(False)
+            button4.set_sensitive(False)
+            button5.set_sensitive(False)
+            button6.set_sensitive(False)
 
 
     def setup_button_strip(self):
@@ -296,6 +322,12 @@ class ProgEditWin(Gtk.Window):
             self.on_button_cancel_clicked,
         )
 
+        # There are no chnages to apply while any programme is running
+        if self.app_obj.current_prog_started_flag:
+            self.reset_button.set_sensitive(False)
+            self.apply_button.set_sensitive(False)
+            self.cancel_button.set_sensitive(False)
+
 
     def setup_gap(self):
 
@@ -337,7 +369,10 @@ class ProgEditWin(Gtk.Window):
             return self.edit_dict[name]
         else:
             attrib = getattr(self.edit_obj, name)
-            return attrib.copy()
+            if type(attrib) is list or type(attrib) is dict:
+                return attrib.copy()
+            else:
+                return attrib
 
 
     def treeview_reset(self):
@@ -500,6 +535,11 @@ class ProgEditWin(Gtk.Window):
                 len(msg_group_list), int(time), str(msg), str(filename),
             ]
             self.liststore.append(mini_list2)
+
+            # For convenience, scroll the textview to the bottom, making the
+            #   new item visible
+            vadjust = self.scrolled.get_vadjustment()
+            vadjust.set_value(vadjust.get_upper())
 
 
     def on_button_apply_clicked(self, button):
@@ -712,6 +752,31 @@ class ProgEditWin(Gtk.Window):
         self.show_all()
 
 
+    def on_button_test_clicked(self, button, combo):
+
+        """Called from a callback in self.setup_tab().
+
+        Tests the selected sound effect.
+
+        Args:
+
+            button (Gtk.Button): The widget clicked
+
+            combo (Gtk.ComboBox): The combobox in which the user has selected a
+                sound effect (or not)
+
+        """
+
+        tree_iter = combo.get_active_iter()
+        model = combo.get_model()
+        filename = model[tree_iter][0]
+
+        if filename:
+
+            self.app_obj.set_sound_file(filename)
+            self.app_obj.play_sound()
+
+
     def on_button_update_clicked(self, button, entry, entry2, combo):
 
         """Called from a callback in self.setup_tab().
@@ -732,17 +797,19 @@ class ProgEditWin(Gtk.Window):
         """
 
         selection = self.treeview.get_selection()
-        (model, iter) = selection.get_selected()
-        if iter is None:
+        (list_model, list_iter) = selection.get_selected()
+        if list_iter is None:
 
             # Nothing selected
             return
 
-        row_num = model[iter][0]
+        else:
+            row_num = list_model[list_iter][0]
+
         time, msg = self.check_entries(entry, entry2)
         tree_iter = combo.get_active_iter()
-        model = combo.get_model()
-        filename = model[tree_iter][0]
+        combo_model = combo.get_model()
+        filename = combo_model[tree_iter][0]
 
         if time is not None:
 
@@ -754,5 +821,8 @@ class ProgEditWin(Gtk.Window):
             msg_group_list[row_num - 1] = mini_list
             self.edit_dict['msg_group_list'] = msg_group_list
 
-            self.treeview_reset()
-            self.treeview_refill()
+            list_model.set_value(list_iter, 0, int(row_num))
+            list_model.set_value(list_iter, 1, int(time))
+            list_model.set_value(list_iter, 2, str(msg))
+            list_model.set_value(list_iter, 3, str(filename))
+            self.treeview.show_all()

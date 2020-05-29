@@ -1,4 +1,16 @@
-v1.019 (29 Mar 2020)
+v2.0 (29 May 2020)
+-------------------------------------------------------------------------------
+
+- The START/STOP/RESET buttons now have icons, rather than text labels (which
+    were difficult to see). Also added tooltips to the buttons
+- Added new buttons to advance/regress the timer by 10 or 60 seconds
+- Programmes can no longer be edited while they are running
+- The edit window has a new button for testing sound effects
+- When a line in the edit window is updated, the scrollbar no longer moves (and
+    the line remains selected)
+
+
+v1.014 (28 Mar 2020)
 -------------------------------------------------------------------------------
 
 - Fix for PyPI installation problems

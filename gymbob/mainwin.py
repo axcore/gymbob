@@ -81,11 +81,14 @@ class MainWin(Gtk.ApplicationWindow):
         self.countdown_textview = None          # Gtk.TextView
         self.this_info_textview = None          # Gtk.TextView
         self.next_info_textview = None          # Gtk.TextView
+        self.back_10_button = None              # Gtk.Button
+        self.back_60_button = None              # Gtk.Button
+        self.forward_60_button = None           # Gtk.Button
+        self.forward_10_button = None           # Gtk.Button
         self.start_button = None                # Gtk.Button
         self.pause_button = None                # Gtk.Button
         self.stop_button = None                 # Gtk.Button
         self.reset_button = None                # Gtk.Button
-
 
         # IV list - other
         # ---------------
@@ -111,8 +114,13 @@ class MainWin(Gtk.ApplicationWindow):
         #   in the form:
         #       key - a string like 'icon_512'
         #       value - a Gdk.Pixbuf
+        # This dictionary also includes icon files used for the start/stop/
+        #   reset buttons, in the form
+        #       key - the strings 'start', 'stop' or 'reset'
+        #       value - a Gdk.Pixbuf
         self.icon_pixbuf_dict = {}
-        # The same list of pixbufs in sequential order
+        # The same list of pixbufs for Gymbob icons in sequential order (not
+        #   including the start/stop/reset icons)
         self.icon_pixbuf_list = []
 
         # List of edit windows (editwin.ProgEditWin objects) that are currently
@@ -140,8 +148,6 @@ class MainWin(Gtk.ApplicationWindow):
 
         # The default location for icons is ../icons
         # When installed via PyPI, the icons are moved to ../gymbob/icons
-        # When installed via a Debian/RPM package, the icons are moved to
-        #   /usr/share/gymbob/icons
         icon_dir_list = []
         icon_dir_list.append(
             os.path.abspath(
@@ -156,12 +162,6 @@ class MainWin(Gtk.ApplicationWindow):
                     'icons',
                 ),
             ),
-        )
-
-        icon_dir_list.append(
-            os.path.join(
-                '/', 'usr', 'share', __main__.__packagename__, 'icons',
-            )
         )
 
         self.icon_pixbuf_list = []
@@ -182,6 +182,25 @@ class MainWin(Gtk.ApplicationWindow):
 
                     self.icon_pixbuf_list.append(pixbuf)
                     self.icon_pixbuf_dict['icon_' + str(size)] = pixbuf
+
+                button_dict = {
+                    'start': 'clock.png',
+                    'stop': 'clock_red.png',
+                    'reset': 'control_repeat_blue.png',
+                }
+
+                for name in button_dict.keys():
+
+                    path = os.path.abspath(
+                        os.path.join(
+                            icon_dir_path,
+                            button_dict[name],
+                        ),
+                    )
+
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+
+                    self.icon_pixbuf_dict[name] = pixbuf
 
         # Pass the list of pixbufs to Gtk
         self.set_icon_list(self.icon_pixbuf_list)
@@ -249,23 +268,64 @@ class MainWin(Gtk.ApplicationWindow):
         hbox = Gtk.HBox()
         self.grid.attach(hbox, 0, 5, 2, 1)
         hbox.set_border_width(spacing * 2)
-        hbox.set_vexpand(True)
+        hbox.set_vexpand(False)
 
-        self.start_button = Gtk.Button('START')
-        hbox.pack_start(self.start_button, True, True, spacing)
-        self.start_button.set_action_name('app.start_button')
+        self.back_10_button = Gtk.Button('<< 10 secs')
+        hbox.pack_start(self.back_10_button, True, True, spacing)
+        self.back_10_button.set_action_name('app.back_10_button')
         # (These buttons are desensitised until a programme is loaded/created)
+        self.back_10_button.set_tooltip_text('Regress timer by 10 seconds')
+        self.back_10_button.set_sensitive(False)
+
+        self.back_60_button = Gtk.Button('<< 60 secs')
+        hbox.pack_start(self.back_60_button, True, True, spacing)
+        self.back_60_button.set_action_name('app.back_60_button')
+        self.back_60_button.set_tooltip_text('Regress timer by 60 seconds')
+        self.back_60_button.set_sensitive(False)
+
+        self.forward_60_button = Gtk.Button('60 secs >>')
+        hbox.pack_start(self.forward_60_button, True, True, spacing)
+        self.forward_60_button.set_action_name('app.forward_60_button')
+        self.forward_60_button.set_tooltip_text('Advance timer by 60 seconds')
+        self.forward_60_button.set_sensitive(False)
+
+        self.forward_10_button = Gtk.Button('10 secs >>')
+        hbox.pack_start(self.forward_10_button, True, True, spacing)
+        self.forward_10_button.set_action_name('app.forward_10_button')
+        self.forward_10_button.set_tooltip_text('Advance timer by 10 seconds')
+        self.forward_10_button.set_sensitive(False)
+
+        hbox2 = Gtk.HBox()
+        self.grid.attach(hbox2, 0, 6, 2, 1)
+        hbox2.set_border_width(spacing * 2)
+        hbox2.set_vexpand(True)
+
+        self.start_button = Gtk.Button()
+        hbox2.pack_start(self.start_button, True, True, spacing)
+        self.start_button.set_image(
+            Gtk.Image.new_from_pixbuf(self.icon_pixbuf_dict['start']),
+        )
+        self.start_button.set_action_name('app.start_button')
+        self.start_button.set_tooltip_text('Start programme')
         self.start_button.set_sensitive(False)
 
-        self.stop_button = Gtk.Button('STOP')
-        hbox.pack_start(self.stop_button, True, True, spacing)
+        self.stop_button = Gtk.Button()
+        hbox2.pack_start(self.stop_button, True, True, spacing)
+        self.stop_button.set_image(
+            Gtk.Image.new_from_pixbuf(self.icon_pixbuf_dict['stop']),
+        )
         self.stop_button.set_sensitive(False)
         self.stop_button.set_action_name('app.stop_button')
+        self.stop_button.set_tooltip_text('Stop programme')
         self.stop_button.set_sensitive(False)
 
-        self.reset_button = Gtk.Button('RESET')
-        hbox.pack_start(self.reset_button, True, True, spacing)
+        self.reset_button = Gtk.Button()
+        hbox2.pack_start(self.reset_button, True, True, spacing)
+        self.reset_button.set_image(
+            Gtk.Image.new_from_pixbuf(self.icon_pixbuf_dict['reset']),
+        )
         self.reset_button.set_action_name('app.reset_button')
+        self.reset_button.set_tooltip_text('Reset programme')
         self.reset_button.set_sensitive(False)
 
 
@@ -612,6 +672,11 @@ class MainWin(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(True)
         self.reset_button.set_sensitive(False)
 
+        self.back_10_button.set_sensitive(True)
+        self.back_60_button.set_sensitive(True)
+        self.forward_60_button.set_sensitive(True)
+        self.forward_10_button.set_sensitive(True)
+
 
     def update_buttons_on_stop(self):
 
@@ -624,6 +689,11 @@ class MainWin(Gtk.ApplicationWindow):
         self.stop_button.set_sensitive(False)
         self.reset_button.set_sensitive(True)
 
+        self.back_10_button.set_sensitive(True)
+        self.back_60_button.set_sensitive(True)
+        self.forward_60_button.set_sensitive(True)
+        self.forward_10_button.set_sensitive(True)
+
 
     def update_buttons_on_reset(self):
 
@@ -635,6 +705,11 @@ class MainWin(Gtk.ApplicationWindow):
         self.start_button.set_sensitive(True)
         self.stop_button.set_sensitive(False)
         self.reset_button.set_sensitive(True)
+
+        self.back_10_button.set_sensitive(False)
+        self.back_60_button.set_sensitive(False)
+        self.forward_60_button.set_sensitive(False)
+        self.forward_10_button.set_sensitive(False)
 
 
     def update_buttons_on_current_prog(self):
@@ -650,10 +725,20 @@ class MainWin(Gtk.ApplicationWindow):
             self.stop_button.set_sensitive(False)
             self.reset_button.set_sensitive(False)
 
+            self.back_10_button.set_sensitive(False)
+            self.back_60_button.set_sensitive(False)
+            self.forward_60_button.set_sensitive(False)
+            self.forward_10_button.set_sensitive(False)
+
         else:
             self.start_button.set_sensitive(True)
             self.stop_button.set_sensitive(True)
             self.reset_button.set_sensitive(True)
+
+            self.back_10_button.set_sensitive(True)
+            self.back_60_button.set_sensitive(True)
+            self.forward_60_button.set_sensitive(True)
+            self.forward_10_button.set_sensitive(True)
 
 
     # (Support functions)

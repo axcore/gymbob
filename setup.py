@@ -37,50 +37,21 @@ on Linux/*BSD.
 # data_files for setuptools.setup are added here
 param_list = []
 
-# For Debian/RPM packaging, use environment variables:
-#   GYMBOB_PKG=1 python3 setup.py build
 script_exec = os.path.join('gymbob', 'gymbob')
 icon_path = '/gymbob/icons/'
 sound_path = '/gymbob/sounds/'
 
-pkg_flag = False
-pkg_var = 'GYMBOB_PKG'
-pkg_value = os.environ.get( pkg_var, None )
-
-if pkg_value is not None:
-
-    if pkg_value == '1':
-
-        # Icons/sounds must be copied into the right place
-        icon_path = '/usr/share/gymbob/icons/'
-        sound_path = '/usr/share/gymbob/sounds/'
-        # Add a desktop file
-        param_list.append(('share/applications', ['pack/gymbob.desktop']))
-        param_list.append(('share/pixmaps', ['pack/gymbob.png']))
-        param_list.append(('share/pixmaps', ['pack/gymbob.xpm']))
-        # Add a manpage
-        param_list.append(('share/man/man1', ['pack/gymbob.1']))
-
-    else:
-        sys.stderr.write(
-            "Unrecognised '%s=%s' environment variable!\n" % (
-                pkg_var,
-                pkg_value,
-            ),
-        )
-
-# For PyPI installations and Debian/RPM packaging, copy everything in ../icons
-#   and ../sounds into a suitable location
+# For PyPI installations, copy everything in ../icons and ../sounds into a
+#   suitable location
 for path in glob.glob('icons/*'):
     param_list.append((icon_path, [path]))
 for path in glob.glob('sounds/*'):
     param_list.append((sound_path, [path]))
 
-
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='1.019',
+    version='2.0',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',
