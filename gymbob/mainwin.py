@@ -453,6 +453,7 @@ class MainWin(Gtk.ApplicationWindow):
 
         frame = Gtk.Frame()
         scrolled.add_with_viewport(frame)
+        frame.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0, 0, 0, 1))
 
         style_provider = self.set_textview_css(
             '#css_text_id_' + str(widget_id) \
@@ -470,10 +471,12 @@ class MainWin(Gtk.ApplicationWindow):
         textview = Gtk.TextView()
         frame.add(textview)
         textview.set_wrap_mode(Gtk.WrapMode.WORD)
-        textview.set_editable(False)
-        textview.set_cursor_visible(False)
+        textview.set_justification(Gtk.Justification.CENTER)
+        textview.set_valign(Gtk.Align.CENTER)
         textview.set_hexpand(True)
         textview.set_vexpand(True)
+        textview.set_editable(False)
+        textview.set_cursor_visible(False)
 
         context = textview.get_style_context()
         context.add_provider(style_provider, 600)

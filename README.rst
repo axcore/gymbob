@@ -154,6 +154,7 @@ If that programme is currently running (in other words, if you have clicked the 
 In the edit window:
 
 - You can modify any step of the programme by clicking on it, typing new values for the time, message, and/or sound effect, and clicking the **Update message** button
+- (Instead of typing new values, you can copy across the selected values by clicking the **Copy selected** button)
 - You can delete a step by clicking on it, and clicking the **Delete message** button
 - You can change the order of the steps by clicking on one step, and then by clicking on the **Move up** and **Move down** buttons
 

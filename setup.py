@@ -51,7 +51,7 @@ for path in glob.glob('sounds/*'):
 # Setup
 setuptools.setup(
     name='gymbob',
-    version='2.0',
+    version='2.004',
     description='Simple script to prompt the user during a workout',
     long_description=long_description,
     long_description_content_type='text/plain',

@@ -195,6 +195,10 @@ class ProgEditWin(Gtk.Window):
         entry.set_hexpand(True)
         entry.set_max_width_chars(4)
 
+        button = Gtk.Button('Copy selected')
+        mini_grid.attach(button, 3, 1, 2, 1)
+        # (signal_connect appears below)
+
         label2 = Gtk.Label('Message')
         mini_grid.attach(label2, 0, 2, 1, 1)
 
@@ -218,17 +222,24 @@ class ProgEditWin(Gtk.Window):
         combo.set_entry_text_column(0)
         combo.set_active(0)
 
-        button = Gtk.Button('Test')
-        mini_grid.attach(button, 3, 3, 1, 1)
+        # (signal_connect from above)
         button.connect(
+            'clicked',
+            self.on_button_copy_clicked,
+            entry, entry2, combo,
+        )
+
+        button2 = Gtk.Button('Test')
+        mini_grid.attach(button2, 3, 3, 1, 1)
+        button2.connect(
             'clicked',
             self.on_button_test_clicked,
             combo,
         )
 
-        button2 = Gtk.Button('Add message')
-        mini_grid.attach(button2, 0, 4, 1, 1)
-        button2.connect(
+        button3 = Gtk.Button('Add message')
+        mini_grid.attach(button3, 0, 4, 1, 1)
+        button3.connect(
             'clicked',
             self.on_button_add_clicked,
             entry,
@@ -236,9 +247,9 @@ class ProgEditWin(Gtk.Window):
             combo,
         )
 
-        button3 = Gtk.Button('Update message')
-        mini_grid.attach(button3, 1, 4, 1, 1)
-        button3.connect(
+        button4 = Gtk.Button('Update message')
+        mini_grid.attach(button4, 1, 4, 1, 1)
+        button4.connect(
             'clicked',
             self.on_button_update_clicked,
             entry,
@@ -246,17 +257,17 @@ class ProgEditWin(Gtk.Window):
             combo,
         )
 
-        button4 = Gtk.Button('Delete message')
-        mini_grid.attach(button4, 2, 4, 1, 1)
-        button4.connect('clicked', self.on_button_delete_clicked)
+        button5 = Gtk.Button('Delete message')
+        mini_grid.attach(button5, 2, 4, 1, 1)
+        button5.connect('clicked', self.on_button_delete_clicked)
 
-        button5 = Gtk.Button('Move up')
-        mini_grid.attach(button5, 3, 4, 1, 1)
-        button5.connect('clicked', self.on_button_move_up_clicked)
+        button6 = Gtk.Button('Move up')
+        mini_grid.attach(button6, 3, 4, 1, 1)
+        button6.connect('clicked', self.on_button_move_up_clicked)
 
-        button6 = Gtk.Button('Move down')
-        mini_grid.attach(button6, 4, 4, 1, 1)
-        button6.connect('clicked', self.on_button_move_down_clicked)
+        button7 = Gtk.Button('Move down')
+        mini_grid.attach(button7, 4, 4, 1, 1)
+        button7.connect('clicked', self.on_button_move_down_clicked)
 
         # If sound is muted, then there's no point in testing sound effects
         if self.app_obj.mute_sound_flag:
@@ -266,11 +277,11 @@ class ProgEditWin(Gtk.Window):
         if self.app_obj.current_prog_started_flag:
             entry.set_sensitive(False)
             entry2.set_sensitive(False)
-            button2.set_sensitive(False)
             button3.set_sensitive(False)
             button4.set_sensitive(False)
             button5.set_sensitive(False)
             button6.set_sensitive(False)
+            button7.set_sensitive(False)
 
 
     def setup_button_strip(self):
@@ -572,6 +583,47 @@ class ProgEditWin(Gtk.Window):
 
         # Destroy the window
         self.destroy()
+
+
+    def on_button_copy_clicked(self, button, entry, entry2, combo):
+
+        """Called from a callback in self.setup_button_strip().
+
+        Copies data from the selected line into the entry/combo boxes, so the user can more
+        conveniently edit them, before clicking 'Update message'.
+
+        Args:
+
+            button (Gtk.Button): The widget clicked
+
+            entry, entry2 (Gtk.Entry): Widgets to update
+
+            combo (Gtk.ComboBox): Another widget to update
+
+        """
+
+        # Get the selected line
+        selection = self.treeview.get_selection()
+        (list_model, list_iter) = selection.get_selected()
+        if list_iter is None:
+
+            # Nothing selected
+            return
+
+        else:
+
+            entry.set_text(str(list_model.get_value(list_iter, 1)))
+            entry2.set_text(str(list_model.get_value(list_iter, 2)))
+
+            sound = list_model.get_value(list_iter, 3)
+            if sound == '' or sound == 'None':
+                combo.set_active(0)
+            else:
+                try:
+                    index = self.app_obj.sound_list.index(sound)
+                    combo.set_active(index + 1)
+                except:
+                    combo.set_active(0)
 
 
     def on_button_delete_clicked(self, button):
