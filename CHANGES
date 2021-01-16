@@ -1,3 +1,12 @@
+v2.006 (16 Jan 2021)
+-------------------------------------------------------------------------------
+
+- Text in the main window boxes is now centred
+- In the programme editing window, added a 'Copy selected' button
+- Fixed an error that occured after deleting a current programme, so that a
+    new current programme is automatically selected (and therefore other parts
+    of the code don't get confused)
+
 v2.0 (29 May 2020)
 -------------------------------------------------------------------------------
 
@@ -8,7 +17,6 @@ v2.0 (29 May 2020)
 - The edit window has a new button for testing sound effects
 - When a line in the edit window is updated, the scrollbar no longer moves (and
     the line remains selected)
-
 
 v1.014 (28 Mar 2020)
 -------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 A S Lewis
+# Copyright (C) 2020-2021 A S Lewis
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -589,8 +589,8 @@ class ProgEditWin(Gtk.Window):
 
         """Called from a callback in self.setup_button_strip().
 
-        Copies data from the selected line into the entry/combo boxes, so the user can more
-        conveniently edit them, before clicking 'Update message'.
+        Copies data from the selected line into the entry/combo boxes, so the
+        user can more conveniently edit them, before clicking 'Update message'.
 
         Args:
 

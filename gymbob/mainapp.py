@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2020 A S Lewis
+# Copyright (C) 2020-2021 A S Lewis
 #
 # This program is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
@@ -827,11 +827,30 @@ class GymBobApp(Gtk.Application):
                 #   empty the main window of text
                 self.main_win_obj.reset_button.clicked()
 
+                # v2.005 If there are any programmes left, make one of them the
+                #   current programme. (This is a quick and dirty hack to
+                #   prevent mainwin.SwitchProgDialogue crashing because no
+                #   current programme is defined)
+                if self.prog_dict:
+
+                    # (The new current programme is the first one in the list
+                    #   of programmes, if it is sorted alphabetically)
+                    prog_list = []
+                    for name in self.prog_dict.keys():
+                        prog_list.append(name)
+
+                    prog_list.sort()
+                    self.current_prog_obj = self.prog_dict[prog_list[0]]
+
                 # (De)sensitise buttons
                 self.main_win_obj.update_buttons_on_current_prog()
 
             # Desensitise menu items, if there are no workout programmes left
             self.main_win_obj.update_menu_items_on_prog()
+
+            # Update the window title for the current programme (if any)
+            if self.current_prog_obj:
+                self.main_win_obj.update_win_title(self.current_prog_obj.name)
 
 
     def on_menu_edit_prog(self, action, par):

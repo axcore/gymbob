@@ -453,7 +453,9 @@ class MainWin(Gtk.ApplicationWindow):
 
         frame = Gtk.Frame()
         scrolled.add_with_viewport(frame)
-        frame.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(0, 0, 0, 1))
+        frame.override_background_color(
+            Gtk.StateType.NORMAL, Gdk.RGBA(0, 0, 0, 1),
+        )
 
         style_provider = self.set_textview_css(
             '#css_text_id_' + str(widget_id) \
